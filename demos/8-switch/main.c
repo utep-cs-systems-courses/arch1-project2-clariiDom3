@@ -22,6 +22,8 @@ void main(void)
 
   or_sr(0x18);  // CPU off, GIE on
 } 
+static int press;
+static int press1;
 
 void
 switch_interrupt_handler()
@@ -34,12 +36,33 @@ switch_interrupt_handler()
 
 /* up=red, down=green */
   if (p1val & SW1) {
-    P1OUT |= LED_RED;
-    P1OUT &= ~LED_GREEN;
+    // P1OUT |= LED_RED;
+    // P1OUT &= ~LED_GREEN;
+    press = 1;
   } else {
-    P1OUT |= LED_GREEN;
-    P1OUT &= ~LED_RED;
+    press = 0;
+    // P1OUT |= LED_GREEN;
+    //P1OUT &= ~LED_RED;
   }
+  if(press){
+    switch(press1){
+    case 0:
+      P1OUT |= LED_GREEN;
+      P1OUT &= ~LED_RED;
+      press1 = 1;
+      break;
+    case 1:
+      P1OUT |= LED_RED;
+      P1OUT &= ~LED_GREEN;
+      press1 = 0;
+      break;
+    default:
+      press1 = 0;
+      P1OUT |= LEDS;
+      break;
+    }
+  }
+  
 }
 
 
