@@ -9,24 +9,29 @@ char button_state = 0;
 void
 __interrupt_vec(WDT_VECTOR) WDT(){	/* 250 interrupts/sec */
   static char count = 0;
-  count++;
-  if((count % 60) == 0 && button_state == 0){
-    mario_song();
+  // count++;
+
+  //switch 1
+  if((count++ == 105) == 0 && button_state == 0){ //button 1, plays song
+    mario_song(); //play song
     count = 0;
   }
-  else if((count % 25) == 0 && button_state == 1)
-    buzzer_siren();
-  else if((count % 62) ==0 && button_state ==1){
-    siren_state();
+  //switch 2
+  else if((count % 25) == 0 && button_state == 1) //butto9n 2, siren buzz
+    buzzer_siren(); //produce siren buzz
+  else if((count == 62) && button_state ==1){ //advances siren state, switched to leds
+    siren_state(); //control tone
     count = 0;
   }
-  else if(button_state == 2){
-    buzzer_set_period(0);
-    green_led_on();
-    count = 0;
+  //switch 3
+  else if(button_state == 2){ //button 3, only green led on, buzzer off
+    buzzer_off(); //turn buzzer off
+    green_led_on(); //turn green led on
   }
-  else if((count % 100) && button_state == 3){
-    buzzer_set_period(0);
+  //switch 4
+  else if((count == 3) && button_state == 3){ //buzzer 4, red led brightly & dimming
+    // buzzer_set_period(0);
+    red_led_on();
     dim();
     count = 0;
   }
